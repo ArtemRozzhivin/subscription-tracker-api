@@ -9,6 +9,7 @@ import connectDB from "./database/mongodb.js";
 import cookieParser from "cookie-parser";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import authMiddleware from "./middlewares/auth.middleware.js";
+import arcjetMiddleware from "./middlewares/arcjet.middleware.js";
 
 const app = express();
 
@@ -16,9 +17,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use(arcjetMiddleware);
+
 app.use("/v1/api/auth", authRouter);
 app.use("/v1/api/users", authMiddleware, userRouter);
 app.use("/v1/api/subscriptions", subscriptionRouter);
+
 
 app.use((req, res, next) => {
   const err = new Error(`Endpoint not found: ${req.method} ${req.originalUrl}`);
